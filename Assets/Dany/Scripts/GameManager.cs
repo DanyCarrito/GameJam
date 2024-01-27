@@ -31,6 +31,11 @@ public class GameManager : MonoBehaviour
         instance = this;
     }
 
+    private void Start()
+    {
+        gameState = GameState.MainMenu;
+    }
+
     public void ChangeGameState(GameState newState)
     {
         gameState = newState;
@@ -89,85 +94,67 @@ public class GameManager : MonoBehaviour
 
     void LoadMainMenu()
     {
+        hideAllPanels();
         menuPanel.SetActive(true);
-        gamePanel.SetActive(false);
-        pausePanel.SetActive(false);
-        victoryPanel.SetActive(false);
-        gameOverPanel.SetActive(false);
     }
 
     void LoadInstructions()
     {
+        hideAllPanels();
         instructionsPanel.SetActive(true);
-        configurationPanel.SetActive(false);
-        menuPanel.SetActive(false);
-        gamePanel.SetActive(false);
-        pausePanel.SetActive(false);
-        victoryPanel.SetActive(false);
-        gameOverPanel.SetActive(false);
     }
 
     void LoadConfiguration()
     {
+        hideAllPanels();
         configurationPanel.SetActive(true);
-        instructionsPanel.SetActive(false);
-        menuPanel.SetActive(false);
-        gamePanel.SetActive(false);
-        pausePanel.SetActive(false);
-        victoryPanel.SetActive(false);
-        gameOverPanel.SetActive(false);
     }
 
     void StartGame()
     {
         SceneManager.LoadScene("SceneDany");
+        hideAllPanels();
         gamePanel.SetActive(true);
-        menuPanel.SetActive(false);
-        pausePanel.SetActive(false);
-        victoryPanel.SetActive(false);
-        gameOverPanel.SetActive(false);
     }
 
     void LoadPause()
     {
         Time.timeScale = 0f;
-        gamePanel.SetActive(false);
+        hideAllPanels();
         pausePanel.SetActive(true);
-        menuPanel.SetActive(false);
-        victoryPanel.SetActive(false);
-        gameOverPanel.SetActive(false);
     }
 
     void ResumeGame()
     {
         Time.timeScale = 1f;
+        hideAllPanels();
         gamePanel.SetActive(true);
-        pausePanel.SetActive(false);
-        menuPanel.SetActive(false);
-        victoryPanel.SetActive(false);
-        gameOverPanel.SetActive(false);
     }
     void Victory()
     {
-        gamePanel.SetActive(false);
+        hideAllPanels();
         victoryPanel.SetActive(true);
-        pausePanel.SetActive(false);
-        menuPanel.SetActive(false);
-        gameOverPanel.SetActive(false);
     }
 
     void GameOver()
     {
+        hideAllPanels();
         gameOverPanel.SetActive(true);
-        gamePanel.SetActive(false);
-        victoryPanel.SetActive(false);
-        pausePanel.SetActive(false);
-        menuPanel.SetActive(false);
     }
 
     void QuitGame()
     {
         Application.Quit();
         Debug.Log("Se acabó");
+    }
+    void hideAllPanels()
+    {
+        menuPanel.SetActive(false);
+        gamePanel.SetActive(false);
+        instructionsPanel.SetActive(false);
+        configurationPanel.SetActive(false);
+        pausePanel.SetActive(false);
+        victoryPanel.SetActive(false);
+        gameOverPanel.SetActive(false);
     }
 }
