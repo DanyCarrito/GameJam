@@ -91,8 +91,10 @@ public class Mechanic : MonoBehaviour {
 
         if (allGood) {
             Debug.Log("Eres una buena persona");
+            GameManager.instance.ChangeGameState(GameState.Victory);
         } else {
             Debug.Log("Eres un inbecil");
+            GameManager.instance.ChangeGameState(GameState.GameOver);
         }
     }
 }

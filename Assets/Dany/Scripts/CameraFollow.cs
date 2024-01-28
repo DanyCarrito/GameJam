@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
+
     private Func <Vector3> GetCameraFollowPosition;
 
     public void Setup(Func<Vector3> GetCameraFollowPosition)

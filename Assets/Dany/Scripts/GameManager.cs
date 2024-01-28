@@ -154,6 +154,9 @@ public class GameManager : MonoBehaviour
         Application.Quit();
         Debug.Log("Se acabó");
     }
+    public void Restart() {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
     void hideAllPanels()
     {
         menuPanel.SetActive(false);
