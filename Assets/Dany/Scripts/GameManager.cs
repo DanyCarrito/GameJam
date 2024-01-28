@@ -151,6 +151,7 @@ public class GameManager : MonoBehaviour
 
     void LoadConfiguration()
     {
+        Debug.Log("Hola");
         hideAllPanels();
         configurationPanel.SetActive(true);
     }
