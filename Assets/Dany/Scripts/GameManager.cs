@@ -7,9 +7,7 @@ public enum GameState
     None,
     MainMenu,
     Instructions,
-    Configuration,
     StartGame,
-    PlayerDeciding,
     Pause,
     GameOver,
     Victory,
@@ -20,10 +18,9 @@ public enum GameState
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] GameObject menuPanel, gameOverPanel, victoryPanel, pausePanel, gamePanel, instructionsPanel, configurationPanel;
+    [SerializeField] GameObject menuPanel, gameOverPanel, victoryPanel, pausePanel, gamePanel, instructionsPanel, listPoints;
     public static GameManager instance;
 
-    private float timer = 0;
 
     [SerializeField] private CameraFollow cameraFollow;
     private Vector3 cameraFollowPosition;
@@ -41,29 +38,13 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        gameState = GameState.MainMenu;
+        //gameState = GameState.MainMenu;
         cameraFollow.Setup(() => cameraFollowPosition);
     }
 
     private void Update()
     {
-        if(cameraFollowPosition.x < rangeWidth)
-        {
-            if (Input.mousePosition.x > Screen.width - edgeSize)
-            {
-                cameraFollowPosition.x += moveAmount * Time.deltaTime;
-            }
-        }
-
-        if (cameraFollowPosition.x > -rangeWidth)
-        {
-            if (Input.mousePosition.x < edgeSize)
-            {
-                cameraFollowPosition.x -= moveAmount * Time.deltaTime;
-            }
-        }
-
-        if (cameraFollowPosition.y < rangeHeight)
+        if (cameraFollowPosition.y < rangeWidth)
         {
             if (Input.mousePosition.y > Screen.height - edgeSize)
             {
@@ -94,14 +75,8 @@ public class GameManager : MonoBehaviour
             case GameState.Instructions:
                 LoadInstructions();
                 break;
-            case GameState.Configuration:
-                LoadConfiguration();
-                break;
             case GameState.StartGame:
                 StartGame();
-                break;
-            case GameState.PlayerDeciding:
-                Timer();
                 break;
             case GameState.Pause:
                 LoadPause();
@@ -128,14 +103,6 @@ public class GameManager : MonoBehaviour
         ChangeGameState((GameState)System.Enum.Parse(typeof(GameState), newState));
     }
 
-    void Timer()
-    {
-        timer += Time.deltaTime;
-        if (timer > 90)
-        {
-            ChangeGameState(GameState.GameOver);
-        }
-    }
 
     void LoadMainMenu()
     {
@@ -149,18 +116,12 @@ public class GameManager : MonoBehaviour
         instructionsPanel.SetActive(true);
     }
 
-    void LoadConfiguration()
-    {
-        Debug.Log("Hola");
-        hideAllPanels();
-        configurationPanel.SetActive(true);
-    }
-
     void StartGame()
     {
-        SceneManager.LoadScene("SceneDany");
+        //SceneManager.LoadScene("Game");
         hideAllPanels();
         gamePanel.SetActive(true);
+        listPoints.SetActive(true);
     }
 
     void LoadPause()
@@ -198,9 +159,9 @@ public class GameManager : MonoBehaviour
         menuPanel.SetActive(false);
         gamePanel.SetActive(false);
         instructionsPanel.SetActive(false);
-        configurationPanel.SetActive(false);
         pausePanel.SetActive(false);
         victoryPanel.SetActive(false);
         gameOverPanel.SetActive(false);
+        listPoints.SetActive(false);
     }
 }
