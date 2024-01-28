@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
-public class Mechanic : MonoBehaviour
-{
+public class Mechanic : MonoBehaviour {
     private LineRenderer lineRenderer;
-    public List<Transform> points= new List<Transform>();
+    public List<Transform> points = new List<Transform>();
     public Transform lastPoints;
 
     private void Awake() {
@@ -13,46 +13,68 @@ public class Mechanic : MonoBehaviour
     }
 
     private void Update() {
-        if(Input.GetMouseButtonDown(0)) {
-            //print("Mouse clicked");
-            Vector2 wordPoint=Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit= Physics2D.Raycast(wordPoint, Vector2.zero);
+        if (Input.GetMouseButtonDown(0)) {
+            Vector2 wordPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(wordPoint, Vector2.zero);
 
-            if(hit.collider != null) {
-                makeLine(hit.collider.transform);
-                //print(hit.collider.name);
+            if (hit.collider != null) {
+                bool isTouchButton = (hit.collider.CompareTag("Bad") || hit.collider.CompareTag("Good"));
+
+                if (isTouchButton) {
+                    makeLine(hit.collider.transform);
+                }
             }
         }
-
     }
+
+
     private void makeLine(Transform finalPoint) {
         if (lastPoints == null) {
             lastPoints = finalPoint;
             points.Add(finalPoint);
         } else {
-            if (!points.Contains(finalPoint) && !ArePointsAtSameY(finalPoint, points[points.Count - 1])) {
+            if (!points.Contains(finalPoint) && !ArePointsAtSamePosition(finalPoint, points[points.Count - 1])) {
                 points.Add(finalPoint);
                 lineRenderer.enabled = true;
                 SetupLine();
+
+                //if (points.Count >= 3) {
+                //    Win();
+                //}
             } else {
-                Debug.Log("No se puede unir con dos en la misma altura");
+                Debug.Log("No se puede unir con un punto de la lista");
             }
         }
     }
 
-    private bool ArePointsAtSameY(Transform newPoint, Transform previousPoint) {
-        if (previousPoint.position.y == newPoint.position.y) {
-            return true;
+    public void RemoveLine() {
+        print("se borro la linea");
+
+        if (points.Count > 1) {
+            points.RemoveAt(points.Count - 1);
+        } else {
+            Debug.Log("Cannot remove the last point. At least one point is required.");
         }
-        return false;
+
+        lineRenderer.positionCount = points.Count;
+        lineRenderer.enabled = points.Count > 1; 
+        lastPoints = points.Count > 0 ? points[points.Count - 1] : null;
+        SetupLine();
     }
 
 
 
+
+    private bool ArePointsAtSamePosition(Transform newPoint, Transform previousPoint) {
+        return Mathf.Approximately(previousPoint.position.x, newPoint.position.x) &&
+               Mathf.Approximately(previousPoint.position.y, newPoint.position.y);
+    }
+
+
     private void SetupLine() {
-        int pointLength=points.Count;
+        int pointLength = points.Count;
         lineRenderer.positionCount = pointLength;
-        for(int i = 0; i < pointLength; i++) {
+        for (int i = 0; i < pointLength; i++) {
             lineRenderer.SetPosition(i, points[i].position);
         }
     }
@@ -63,17 +85,14 @@ public class Mechanic : MonoBehaviour
         foreach (Transform point in points) {
             if (point.CompareTag("Good") == false) {
                 allGood = false;
-                break; 
+                break;
             }
         }
 
         if (allGood) {
-            Debug.Log("You win!");
+            Debug.Log("Eres una buena persona");
         } else {
-            Debug.Log("You lose!");
+            Debug.Log("Eres un inbecil");
         }
     }
-
 }
-
-
