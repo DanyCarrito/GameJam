@@ -22,7 +22,15 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject menuPanel, gameOverPanel, victoryPanel, pausePanel, gamePanel, instructionsPanel, configurationPanel;
     public static GameManager instance;
-    float timer = 0;
+
+    private float timer = 0;
+
+    [SerializeField] private CameraFollow cameraFollow;
+    private Vector3 cameraFollowPosition;
+    [SerializeField] private float moveAmount;
+    [SerializeField] private float edgeSize;
+    [SerializeField] private float rangeWidth;
+    [SerializeField] private float rangeHeight;
 
     public GameState gameState;
 
@@ -34,6 +42,43 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         gameState = GameState.MainMenu;
+        cameraFollow.Setup(() => cameraFollowPosition);
+    }
+
+    private void Update()
+    {
+        if(cameraFollowPosition.x < rangeWidth)
+        {
+            if (Input.mousePosition.x > Screen.width - edgeSize)
+            {
+                cameraFollowPosition.x += moveAmount * Time.deltaTime;
+            }
+        }
+
+        if (cameraFollowPosition.x > -rangeWidth)
+        {
+            if (Input.mousePosition.x < edgeSize)
+            {
+                cameraFollowPosition.x -= moveAmount * Time.deltaTime;
+            }
+        }
+
+        if (cameraFollowPosition.y < rangeHeight)
+        {
+            if (Input.mousePosition.y > Screen.height - edgeSize)
+            {
+                cameraFollowPosition.y += moveAmount * Time.deltaTime;
+            }
+        }
+
+        if (cameraFollowPosition.y > -rangeHeight)
+        {
+            if (Input.mousePosition.y < edgeSize)
+            {
+                cameraFollowPosition.y -= moveAmount * Time.deltaTime;
+            }
+        }
+        
     }
 
     public void ChangeGameState(GameState newState)
