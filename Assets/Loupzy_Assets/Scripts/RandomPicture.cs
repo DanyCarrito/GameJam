@@ -18,13 +18,17 @@ public class RandomSprite : MonoBehaviour {
     private string Defeat = "Bad";
 
     void Start() {
+
         textoTMP = textDescription.GetComponent<TextMeshPro>();
         ChangeRandomSpriteClient();
         ChangeTreeDecision();
-        Invoke("DeleteText", 5f);
+
     }
 
     void Update() {
+        if (GameManager.instance.isPlaying()) {
+        Invoke("DeleteText", 5f);
+        }
 
     }
 
@@ -66,7 +70,7 @@ public class RandomSprite : MonoBehaviour {
         switch (randomIndex) {
             case 0:
                 spriteDecision = spriteDecision1;
-                textoTMP.text = "Hola, ¿cómo estás? Me preguntaba si podrías hacerme una pizza un poco diferente. Me encantaría tener queso, tomate y peperoni, pero si puedes, agrégale un toque especial con pez. ¡Estaré muy agradecido! Gracias";
+                textoTMP.text = "Hola, ¿cómo estás? Me preguntaba si podrías hacerme una pizza un poco diferente. Me encantaría tener queso, tomate y peperoni.¡Estaré muy agradecido! Gracias";
                 pinTag[0].tag = Win;
                 pinTag[1].tag = Defeat;
                 pinTag[2].tag = Defeat;

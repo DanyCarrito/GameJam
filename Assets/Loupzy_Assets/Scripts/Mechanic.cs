@@ -83,18 +83,19 @@ public class Mechanic : MonoBehaviour {
         bool allGood = true;
 
         foreach (Transform point in points) {
-            if (point.CompareTag("Good") == false) {
+            if (!point.CompareTag("Good")) {
                 allGood = false;
                 break;
             }
         }
 
-        if (allGood) {
-            Debug.Log("Eres una buena persona");
+        if (allGood && points.Count > 0 && points.Count == GameObject.FindGameObjectsWithTag("Good").Length) {
+            Debug.Log("¡Ganaste! Eres una buena persona");
             GameManager.instance.ChangeGameState(GameState.Victory);
         } else {
-            Debug.Log("Eres un inbecil");
+            Debug.Log("Perdiste. Eres un inbecil");
             GameManager.instance.ChangeGameState(GameState.GameOver);
         }
     }
+
 }

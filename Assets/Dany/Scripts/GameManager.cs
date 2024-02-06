@@ -20,9 +20,9 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject menuPanel, gameOverPanel, victoryPanel, pausePanel, gamePanel, instructionsPanel, listPoints;
     public static GameManager instance;
+    [SerializeField] GameObject gameOverPanel2, victoryPanel2;
 
-
-    [SerializeField] private CameraFollow cameraFollow;
+   [SerializeField] private CameraFollow cameraFollow;
     private Vector3 cameraFollowPosition;
     [SerializeField] private float moveAmount;
     [SerializeField] private float edgeSize;
@@ -88,7 +88,8 @@ public class GameManager : MonoBehaviour
                 Victory();
                 break;
             case GameState.Restart:
-                StartGame();
+                //StartGame();
+                Restart();
                 break;
             case GameState.Resume:
                 ResumeGame();
@@ -140,13 +141,25 @@ public class GameManager : MonoBehaviour
     void Victory()
     {
         hideAllPanels();
-        victoryPanel.SetActive(true);
+        bool isOneVictory = Random.value > 0.5f;
+
+        if(!isOneVictory) {
+            victoryPanel.SetActive(true);
+        } else {
+            victoryPanel2.SetActive(true);
+        }
     }
 
     void GameOver()
     {
         hideAllPanels();
-        gameOverPanel.SetActive(true);
+        bool isOneDefeat = Random.value > 0.5f;
+
+        if (!isOneDefeat) {
+            gameOverPanel.SetActive(true);
+        } else {
+            gameOverPanel2.SetActive(true);
+        }
     }
 
     void QuitGame()
@@ -156,6 +169,15 @@ public class GameManager : MonoBehaviour
     }
     public void Restart() {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1f;
+    }
+
+    public void GotoMainMenu() {
+        Restart();
+        ChangeGameState(GameState.MainMenu);
+    }
+    public bool isPlaying() {
+        return gameState == GameState.StartGame;
     }
     void hideAllPanels()
     {
@@ -165,6 +187,8 @@ public class GameManager : MonoBehaviour
         pausePanel.SetActive(false);
         victoryPanel.SetActive(false);
         gameOverPanel.SetActive(false);
+        victoryPanel2.SetActive(false);
+        gameOverPanel2.SetActive(false);
         listPoints.SetActive(false);
     }
 }
